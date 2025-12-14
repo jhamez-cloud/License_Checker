@@ -59,52 +59,57 @@ export default function DeveloperDashboard() {
                     <p className="text-lg text-gray-500">No licenses found. Please ask your Legal Officer to add some.</p>
                 </div>
             ) : (
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">License Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Left</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                        {licenses.map((license) => {
-                            const status = getLicenseStatus(license.expirationDate);
-                            const timeRemaining = calculateTimeRemaining(license.expirationDate);
-                            return (
-                                <tr key={license.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {license.name}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${getStatusStyle(status)}`}>
-                        {getStatusIcon(status)}
-                          {status}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <div className="flex items-center">
-                                            <Clock className="w-4 h-4 mr-2" />
-                                            {status === 'Expired' ? '0y, 0m, 0d, 0hrs, 0mins' : timeRemaining}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button
-                                            onClick={() => handleRequestUpdate(license.name)}
-                                            disabled={status === 'Active'}
-                                            className={`text-indigo-600 hover:text-indigo-900 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center`}
-                                        >
-                                            <RefreshCw className="w-4 h-4 mr-1" />
-                                            Request Update
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                        </tbody>
-                    </table>
+                <div className="overflow-x-auto shadow border-b border-gray-200 sm:rounded-lg">
+                    <div className="inline-block min-w-full align-middle">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">License Name</th>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Left</th>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                            {licenses.map((license) => {
+                                const status = getLicenseStatus(license.expirationDate);
+                                const timeRemaining = calculateTimeRemaining(license.expirationDate);
+                                return (
+                                    <tr key={license.id}>
+                                        <td className="px-3 sm:px-6 py-4 text-sm font-medium text-gray-900 break-words">
+                                            {license.name}
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-4">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${getStatusStyle(status)}`}>
+                            {getStatusIcon(status)}
+                              {status}
+                          </span>
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-4 text-sm text-gray-500">
+                                            <div className="flex items-center">
+                                                <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
+                                                <span className="break-words">
+                                                    {status === 'Expired' ? '0y, 0m, 0d, 0hrs, 0mins' : timeRemaining}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-4 text-sm font-medium">
+                                            <button
+                                                onClick={() => handleRequestUpdate(license.name)}
+                                                disabled={status === 'Active'}
+                                                className={`text-indigo-600 hover:text-indigo-900 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center`}
+                                            >
+                                                <RefreshCw className="w-4 h-4 mr-1 flex-shrink-0" />
+                                                <span className="hidden sm:inline">Request Update</span>
+                                                <span className="sm:hidden">Update</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
         </div>

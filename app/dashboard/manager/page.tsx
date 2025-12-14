@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { getLicenses, getStoredUsers, addNewUser } from '@/lib/storage';
 import { getLicenseStatus, calculateTimeRemaining } from '@/lib/licenseUtils';
-import {User, Users, FileText, Plus, Briefcase, Code, Clock} from 'lucide-react';
+import {User, Users, FileText, Plus, Briefcase, Code, Clock, Eye, EyeOff} from 'lucide-react';
 import { License, Role, UsersStore } from '@/lib/types';
 
 export default function ManagerDashboard() {
@@ -14,6 +14,7 @@ export default function ManagerDashboard() {
     // State for adding new user
     const [newEmail, setNewEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [newRole, setNewRole] = useState<Role>('developer');
 
     const fetchData = useCallback(() => {
@@ -69,39 +70,42 @@ export default function ManagerDashboard() {
                 <h3 className="text-xl font-semibold text-gray-800 flex items-center mb-4 border-b pb-2">
                     <FileText className="w-5 h-5 mr-2" /> License Status & Expiry Time
                 </h3>
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                        {/* ... (Table Headers: Name, Status, Time Left) */}
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">License Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Left</th>
-                        </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                        {licenses.map((license) => {
-                            const status = getLicenseStatus(license.expirationDate);
-                            const timeRemaining = calculateTimeRemaining(license.expirationDate);
-                            return (
-                                <tr key={license.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{license.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${getStatusStyle(status)}`}>
-                        {status}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <div className="flex items-center">
-                                            <Clock className="w-4 h-4 mr-2" />
-                                            {status === 'Expired' ? '0y, 0m, 0d, 0hrs, 0mins' : timeRemaining}
-                                        </div>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                        </tbody>
-                    </table>
+                <div className="overflow-x-auto shadow border-b border-gray-200 sm:rounded-lg">
+                    <div className="inline-block min-w-full align-middle">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">License Name</th>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Left</th>
+                            </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                            {licenses.map((license) => {
+                                const status = getLicenseStatus(license.expirationDate);
+                                const timeRemaining = calculateTimeRemaining(license.expirationDate);
+                                return (
+                                    <tr key={license.id}>
+                                        <td className="px-3 sm:px-6 py-4 text-sm font-medium text-gray-900 break-words">{license.name}</td>
+                                        <td className="px-3 sm:px-6 py-4">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${getStatusStyle(status)}`}>
+                            {status}
+                          </span>
+                                        </td>
+                                        <td className="px-3 sm:px-6 py-4 text-sm text-gray-500">
+                                            <div className="flex items-center">
+                                                <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
+                                                <span className="break-words">
+                                                    {status === 'Expired' ? '0y, 0m, 0d, 0hrs, 0mins' : timeRemaining}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -112,10 +116,10 @@ export default function ManagerDashboard() {
                 </h3>
 
                 {/* Add New Authenticated User Form */}
-                <div className="bg-white p-6 rounded-xl shadow-lg mb-6">
-                    <h4 className="text-lg font-medium text-gray-900 mb-4 flex items-center"><Plus className="w-4 h-4 mr-2" /> Add New User</h4>
+                <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg mb-6">
+                    <h4 className="text-lg font-medium text-gray-900 mb-4 flex items-center"><Plus className="w-4 h-4 mr-2 flex-shrink-0" /> Add New User</h4>
                     <form onSubmit={handleAddNewUser} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
                                 <label htmlFor="user-email" className="block text-sm font-medium text-gray-700">Email</label>
                                 <input
@@ -129,14 +133,27 @@ export default function ManagerDashboard() {
                             </div>
                             <div>
                                 <label htmlFor="user-password" className="block text-sm font-medium text-gray-700">Password</label>
-                                <input
-                                    type="text"
-                                    id="user-password"
-                                    required
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-purple-500 focus:border-purple-500"
-                                />
+                                <div className="mt-1 relative">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        id="user-password"
+                                        required
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 pr-10 focus:ring-purple-500 focus:border-purple-500"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="h-5 w-5" aria-hidden="true" />
+                                        ) : (
+                                            <Eye className="h-5 w-5" aria-hidden="true" />
+                                        )}
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label htmlFor="user-role" className="block text-sm font-medium text-gray-700">Role</label>
@@ -155,35 +172,39 @@ export default function ManagerDashboard() {
                         </div>
                         <button
                             type="submit"
-                            className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            className="w-full sm:w-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                         >
-                            <Plus className="w-5 h-5 mr-2" /> Create User
+                            <Plus className="w-5 h-5 mr-2 flex-shrink-0" /> Create User
                         </button>
                     </form>
                 </div>
 
                 {/* Current Authenticated Users List */}
                 <h4 className="text-lg font-medium text-gray-900 mb-4 mt-6">Current System Users</h4>
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                        </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                        {Object.entries(users).map(([email, user]) => (
-                            <tr key={email}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{email}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center">
-                                    {getUserRoleIcon(user.role)}
-                                    {user.role.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                                </td>
+                <div className="overflow-x-auto shadow border-b border-gray-200 sm:rounded-lg">
+                    <div className="inline-block min-w-full align-middle">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
                             </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                            {Object.entries(users).map(([email, user]) => (
+                                <tr key={email}>
+                                    <td className="px-3 sm:px-6 py-4 text-sm font-medium text-gray-900 break-words">{email}</td>
+                                    <td className="px-3 sm:px-6 py-4 text-sm text-gray-500">
+                                        <div className="flex items-center">
+                                            {getUserRoleIcon(user.role)}
+                                            <span>{user.role.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
         </div>
