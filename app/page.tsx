@@ -1,7 +1,7 @@
 // app/page.tsx
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogIn, Send, Briefcase, User, Code, XCircle, CheckCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 import { initialUsers } from '@/lib/data';
@@ -80,6 +80,7 @@ export default function LoginPage() {
         setRequestStatus('idle'); // Reset status on close
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const getRoleIcon = (role: string) => {
         switch (role) {
             case 'legal_officer': return <Briefcase className="w-5 h-5 mr-2 text-blue-500" />;

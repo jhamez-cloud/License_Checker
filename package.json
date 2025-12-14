@@ -9,13 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@sendgrid/mail": "^8.1.6",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "resend": "^6.6.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

@@ -20,8 +20,7 @@ export default function DeveloperDashboard() {
 
     const handleRequestUpdate = (licenseName: string) => {
         // Client-side simulation of sending a request to the manager
-        const managerEmail = process.env.NEXT_PUBLIC_MANAGER_EMAIL || "manager@corp.com";
-        alert(`Update request for license "${licenseName}" sent to the manager at ${managerEmail}!`);
+        alert(`Update request for license "${licenseName}" sent to the manager. Please follow up directly with your manager.`);
         // In a real app, you would send this to an API endpoint.
     };
 
